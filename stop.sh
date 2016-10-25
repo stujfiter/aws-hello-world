@@ -15,3 +15,5 @@ fi
 
 aws ec2 delete-tags --resources $INSTANCE_ID
 aws ec2 delete-security-group --group-name my-sg
+aws ec2 delete-key-pair --key-name adam
+rm adam.pem
