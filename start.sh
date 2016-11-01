@@ -1,7 +1,9 @@
 #! /bin/bash
 
-aws ec2 create-key-pair --key-name adam | jq -r '.KeyMaterial' > adam.pem
+openssl genrsa -out adam.pem 2048
 chmod 600 adam.pem
+openssl rsa -in adam.pem -pubout > adam.pub
+aws ec2 import-key-pair --key-name adam --public-key-material "$(sed '1d;$d' adam.pub)"
 aws ec2 create-security-group --group-name my-sg --description "My Security Group"
 aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 22 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 80 --cidr 0.0.0.0/0
